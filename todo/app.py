@@ -2,11 +2,7 @@ from flask import Flask, render_template, request, redirect
 from datetime import datetime
 
 app = Flask(__name__)
-
-# Store tasks in a list instead of a database
 tasks = []
-
-
 @app.route("/", methods=["POST", "GET"])
 def index():
     if request.method == "POST":
@@ -17,8 +13,7 @@ def index():
         if completion_date:
             completion_date = datetime.strptime(completion_date, "%Y-%m-%d")
 
-        # Add new task to the tasks list
-        tasks.append({
+          tasks.append({
             "id": len(tasks) + 1,
             "content": task_content,
             "completed": False,
@@ -30,19 +25,17 @@ def index():
     else:
         return render_template("index.html", tasks=tasks)
 
-
 @app.route("/delete/<int:id>")
 def delete(id):
-    # Find and remove the task with the specified id
+    
     task_to_remove = next((task for task in tasks if task["id"] == id), None)
     if task_to_remove:
         tasks.remove(task_to_remove)
     return redirect("/")
 
-
 @app.route("/update/<int:id>", methods=["POST", "GET"])
 def update(id):
-    # Find the task to update
+    
     task_to_update = next((task for task in tasks if task["id"] == id), None)
     if request.method == "POST":
         if task_to_update:
@@ -54,15 +47,11 @@ def update(id):
     else:
         return render_template("index.html", update_task=task_to_update, tasks=tasks)
 
-
 @app.route("/toggle/<int:id>")
-def toggle(id):
-    # Toggle task completion status
+def toggle(id): 
     task_to_toggle = next((task for task in tasks if task["id"] == id), None)
     if task_to_toggle:
         task_to_toggle["completed"] = not task_to_toggle["completed"]
     return redirect("/")
-
-
 if __name__ == "__main__":
     app.run(debug=True)
