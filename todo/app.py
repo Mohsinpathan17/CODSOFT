@@ -13,7 +13,7 @@ def index():
         if completion_date:
             completion_date = datetime.strptime(completion_date, "%Y-%m-%d")
 
-          tasks.append({
+        tasks.append({
             "id": len(tasks) + 1,
             "content": task_content,
             "completed": False,
